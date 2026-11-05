@@ -1,0 +1,20 @@
+name: Build PS3 AI App
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build_pkg:
+    runs-on: ubuntu-latest
+    container:
+      image: ps3dev/ps3dev:latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Build Code
+        run: |
+          echo "Building PS3 application..."
+          # This placeholder ensures the cloud server sets up correctly
