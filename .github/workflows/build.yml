@@ -7,12 +7,19 @@ on:
 
 jobs:
   build_pkg:
-    runs-on: ubuntu-latest
-    container:
-      image: ps3dev/ps3dev:latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up PS3 Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y autoconf automake bison flex g++ libelf-dev make texinfo libncurses5-dev patch python3-pip
+          # تحميل أدوات بناء الـ PKG الخاصة بالبلايستيشن 3
+          wget https://github.com
+          tar -xvf ps3tools_linux.tar.gz
+          echo "$(pwd)/ps3tools" >> $GITHUB_PATH
 
       - name: Build Code
         run: |
