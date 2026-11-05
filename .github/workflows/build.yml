@@ -16,5 +16,5 @@ jobs:
 
       - name: Build Code
         run: |
-          echo "Building PS3 application..."
-          # This placeholder ensures the cloud server sets up correctly
+          make clean
+          make
