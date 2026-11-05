@@ -12,22 +12,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Tools and Create Files
+      - name: Install Python and Tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget make
-          
-          # تحميل أدوات بناء الـ PKG الخاصة بالبلايستيشن 3
-          wget https://github.com
-          tar -xvf ps3tools_linux.tar.gz
-          
-          # إنشاء ملف الإعدادات المطلوب للأداة لضمان نجاح البناء
-          cat << 'EOF' > package.conf
-          ContentID = UP0001-AI0000001_00-0000000000000000
-          Klicensee = 0x00000000000000000000000000000000
-          EOF
+          sudo apt-get install -y python3 python3-pip make
+          # تحميل أداة بناء حزم البلايستيشن 3 الحديثة المتوافقة مع السيرفر
+          pip3 install git+https://github.com --break-system-packages || pip3 install git+https://github.com
 
-          # إنشاء ملف الكود الأساسي بالتعديل الجديد
+      - name: Create PS3 App Files
+        run: |
+          # إنشاء كود برمجائي بسيط
           cat << 'EOF' > main.c
           #include <stdio.h>
           int main() {
@@ -36,19 +30,17 @@ jobs:
           }
           EOF
 
-          # تعديل طريقة البناء لتتوافق مع ملف الإعدادات
-          cat << 'EOF' > Makefile
-          all: ps3_ai_app.pkg
-          ps3_ai_app.pkg: main.c
-              gcc -O2 main.c -o ps3_ai_app.elf
-              ./ps3tools/make_package_npdrm package.conf ps3_ai_app.pkg || touch ps3_ai_app.pkg
-          clean:
-              rm -f *.elf *.pkg package.conf
+          # إنشاء ملف إعدادات الحزمة للبلايستيشن
+          cat << 'EOF' > package.conf
+          ContentID = UP0001-AI0000001_00-0000000000000000
           EOF
 
-      - name: Build Final PKG
+      - name: Compile and Pack PS3 PKG
         run: |
-          make
+          # بناء ملف التشغيل
+          gcc -O2 main.c -o EBOOT.BIN
+          # تحويله إلى حزمة PKG جاهزة للبلايستيشن 3
+          pkg-packager --content-id UP0001-AI0000001_00-0000000000000000 EBOOT.BIN ps3_ai_app.pkg
 
       - name: Upload PKG Product
         uses: actions/upload-artifact@v4
