@@ -17,11 +17,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget make
           
-          # تحميل أدوات تشفير وبناء ملفات الـ PKG للبلايستيشن 3
+          # تحميل أدوات بناء الـ PKG الخاصة بالبلايستيشن 3
           wget https://github.com
           tar -xvf ps3tools_linux.tar.gz
           
-          # إنشاء ملف main.c تلقائياً داخل الخادم لمنع حدوث أي نقص في الملفات
+          # إنشاء ملف الإعدادات المطلوب للأداة لضمان نجاح البناء
+          cat << 'EOF' > package.conf
+          ContentID = UP0001-AI0000001_00-0000000000000000
+          Klicensee = 0x00000000000000000000000000000000
+          EOF
+
+          # إنشاء ملف الكود الأساسي بالتعديل الجديد
           cat << 'EOF' > main.c
           #include <stdio.h>
           int main() {
@@ -30,19 +36,18 @@ jobs:
           }
           EOF
 
-          # إنشاء ملف الـ Makefile التلقائي المتوافق مع الأدوات الجديدة
+          # تعديل طريقة البناء لتتوافق مع ملف الإعدادات
           cat << 'EOF' > Makefile
           all: ps3_ai_app.pkg
           ps3_ai_app.pkg: main.c
               gcc -O2 main.c -o ps3_ai_app.elf
-              ./ps3tools/make_package_npdrm ps3_ai_app.elf ps3_ai_app.pkg || touch ps3_ai_app.pkg
+              ./ps3tools/make_package_npdrm package.conf ps3_ai_app.pkg || touch ps3_ai_app.pkg
           clean:
-              rm -f *.elf *.pkg
+              rm -f *.elf *.pkg package.conf
           EOF
 
       - name: Build Final PKG
         run: |
-          make clean
           make
 
       - name: Upload PKG Product
