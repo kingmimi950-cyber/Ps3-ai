@@ -1,26 +1,23 @@
 
-.SUFFIXES:
-
-TARGET  := Mustafa-Chess
-TITLE   := Mustafa Chess
-APPID   := MSTC00001
-
+TARGET := Mustafa-Chess
+BUILD  := build
 SOURCES := source
-INCLUDES := include
 
-OFILES := $(SOURCES)/main.o
+CFILES := $(wildcard $(SOURCES)/*.c)
+CPPFILES := $(wildcard $(SOURCES)/*.cpp)
 
-CFLAGS   += -O2 -Wall -Iinclude
-CXXFLAGS += -O2 -Wall -std=gnu++11 -Iinclude
+OBJS := $(CFILES:.c=.o) $(CPPFILES:.cpp=.o)
+
+CFLAGS += -O2 -Wall
+CXXFLAGS += -O2 -Wall -std=gnu++11
 
 include $(PSL1GHT)/ppu_rules
 
 .PHONY: all clean
 
-all: $(TARGET).pkg
+all: $(TARGET).self
 
 clean:
-	rm -f $(OFILES)
+	rm -f $(OBJS)
 	rm -f $(TARGET).elf $(TARGET).self
-	rm -f $(TARGET).pkg
-	rm -rf build
+	rm -rf $(BUILD)
