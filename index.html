@@ -11,11 +11,7 @@
             margin: 15px;
             font-size: 22px;
         }
-        h2 {
-            color: #58a6ff;
-            text-align: center;
-            margin-bottom: 10px;
-        }
+        h2 { color: #58a6ff; text-align: center; margin-bottom: 10px; }
         #chat-box {
             background-color: #161b22;
             border: 2px solid #30363d;
@@ -69,9 +65,7 @@
             var chatBox = document.getElementById("chat-box");
             var question = input.value;
 
-            if (!question || question === "") {
-                return;
-            }
+            if (!question || question === "") return;
 
             chatBox.innerHTML += '<div class="user-msg"><b>أنت:</b> ' + question + '</div>';
             input.value = "";
@@ -100,7 +94,7 @@
                             chatBox.innerHTML += '<div class="err-msg"><b>خطأ في قراءة الرد:</b> ' + e.message + '</div>';
                         }
                     } else {
-                        chatBox.innerHTML += '<div class="err-msg"><b>خطأ اتصال (' + xhr.status + '):</b> تأكد من الإنترنت أو إعدادات SSL في المتصفح.</div>';
+                        chatBox.innerHTML += '<div class="err-msg"><b>خطأ اتصال (' + xhr.status + '):</b> تأكد من الإنترنت أو إعدادات المتصفح.</div>';
                     }
                     chatBox.scrollTop = chatBox.scrollHeight;
                 }
