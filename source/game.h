@@ -1,3 +1,4 @@
+
 #ifndef MUSTAFA_GAME_H
 #define MUSTAFA_GAME_H
 
@@ -7,14 +8,9 @@ struct GameSession {
     ChessBoard board;
     bool active;
 
-    GameSession() {
-        active = true;
-    }
+    GameSession();
 
-    void restart() {
-        board.reset();
-        active = true;
-    }
+    void restart();
 };
 
 class MustafaGame {
@@ -22,18 +18,9 @@ public:
     GameSession matchA;
     GameSession matchB;
 
-    void restartAll() {
-        matchA.restart();
-        matchB.restart();
-    }
-
-    void restartMatchA() {
-        matchA.restart();
-    }
-
-    void restartMatchB() {
-        matchB.restart();
-    }
+    void restartAll();
+    void restartMatchA();
+    void restartMatchB();
 };
 
 #endif
