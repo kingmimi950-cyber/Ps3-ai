@@ -1,30 +1,26 @@
 
-# Mustafa Chess - PlayStation 3
-# PSL1GHT build configuration
+.SUFFIXES:
 
-TARGET      := Mustafa-Chess
-TITLE       := Mustafa Chess
-APPID       := MSTCH001
+TARGET  := Mustafa-Chess
+TITLE   := Mustafa Chess
+APPID   := MSTC00001
 
-BUILD       := build
-SOURCES     := source
-INCLUDES    := include
+SOURCES := source
+INCLUDES := include
 
-CFLAGS      := -O2 -Wall
-CXXFLAGS    := -O2 -Wall -std=gnu++11
+OFILES := $(SOURCES)/main.o
 
-LIBS        :=
+CFLAGS   += -O2 -Wall -Iinclude
+CXXFLAGS += -O2 -Wall -std=gnu++11 -Iinclude
 
 include $(PSL1GHT)/ppu_rules
 
-.PHONY: all clean pkg
+.PHONY: all clean
 
-all: $(TARGET).self
-
-pkg: $(TARGET).pkg
+all: $(TARGET).pkg
 
 clean:
-	rm -rf $(BUILD)
-	rm -f $(TARGET).elf
-	rm -f $(TARGET).self
+	rm -f $(OFILES)
+	rm -f $(TARGET).elf $(TARGET).self
 	rm -f $(TARGET).pkg
+	rm -rf build
